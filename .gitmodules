@@ -1,0 +1,3 @@
+[submodule "cereprocess"]
+	path = cereprocess
+	url = https://github.com/DeepMind-Companions/CereProcess.git
