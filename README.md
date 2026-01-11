@@ -16,10 +16,16 @@ pip install -r requirements.txt
 
 ## Usage
 The models directory contains the PyTorch Models used in this project.
-See report_gen.ipynb for all the steps.
-The usage of this notebook requires the NMT Scalp EEG Dataset and NMT Events Dataset and the trained weights of the models on these datasets.
+See report_gen.ipynb for all steps of report generation.
+The usage of this notebook requires the NMT Scalp EEG Dataset and NMT Events Dataset and the trained weights of the models on these datasets as well as the corresponding reports (Which are not made public due to patient anonymity).
+Also see the following repositories:
+- https://github.com/dll-ncai/Localization-of-Abnormalities-in-EEG-Waveforms
+- https://github.com/dll-ncai/eeg_pre-diagnostic_screening
+For Datasets see:
+https://dll.seecs.nust.edu.pk/downloads/
 
 ## Project Structure
+```text
 eegwriter/
 ├── models
 │   ├── \_\_init\_\_.py
@@ -33,3 +39,4 @@ eegwriter/
 ├── README.md
 ├── report_gen.ipynb
 └── requirements.txt
+```
