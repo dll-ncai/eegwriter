@@ -33,12 +33,12 @@ https://dll.seecs.nust.edu.pk/downloads/
 ```text
 eegwriter/
 ├── models
-│   ├── \_\_init\_\_.py
+│   ├── __init__.py
 │   ├── scnet.py
 │   └── vgg16.py
 ├── pdr.py
 ├── pipeline
-│   ├── \_\_init\_\_.py
+│   ├── __init__.py
 │   ├── channels.py
 │   └── pipeline.py
 ├── README.md
