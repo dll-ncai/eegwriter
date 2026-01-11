@@ -10,7 +10,10 @@ cd eegwriter
 Install the required dependencies:
 ```bash
 python -m venv env
-source env/bin/activate (On Linux)
+# On Linux/MacOS:
+source env/bin/activate
+# On Windows:
+# .\env\Scripts\activate
 pip install -r requirements.txt
 ```
 
@@ -22,6 +25,7 @@ Also see the following repositories:
 - https://github.com/dll-ncai/Localization-of-Abnormalities-in-EEG-Waveforms
 - https://github.com/dll-ncai/eeg_pre-diagnostic_screening
 For Datasets see:
+
 https://dll.seecs.nust.edu.pk/downloads/
 
 ## Project Structure
