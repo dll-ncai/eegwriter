@@ -59,7 +59,7 @@ class VGG16Morlet(nn.Module):
         with torch.no_grad():
             for i in range(x.size(0)):
                 # Generate scalogram for this specific signal
-                img = self.generate_scalogram_tensor(x[i])
+                img = self._generate_scalogram_tensor(x[i])
                 batch_images.append(img)
 
             # Stack into a single batch tensor: (Batch, 3, 23, 400)

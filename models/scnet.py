@@ -36,7 +36,7 @@ class SILM(nn.Module):
 
 
 class SCNet(nn.Module):
-    def __init__(self, input_shape):
+    def __init__(self):
         super(SCNet, self).__init__()
         self.silm = SILM()
         self.mffm_block1 = MFFMBlock(50)

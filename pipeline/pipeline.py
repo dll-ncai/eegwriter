@@ -5,6 +5,7 @@
 
 import mne
 import numpy as np
+import resampy
 from .channels import NMT_CHANNELS, NMT_PAIRS, LOCAL_CHANNELS
 
 class Preprocess:
@@ -62,7 +63,42 @@ class ResampleData(Preprocess):
     def get_id(self):
         return f'{self.__class__.__name__}_{self.sample_rate}'
 
-class PaddedCropData(CropData):
+class ResampleDataKaiser(Preprocess):
+    """Responsible for resampling the data to 100 Hz using resampy
+    to match the notebook's implementation exactly.
+    Inputs: raw EEG data in MNE format
+    Outputs: raw EEG data resampled to target_rate
+    """
+
+    def __init__(self, sample_rate):
+        self.sample_rate = sample_rate
+
+    def func(self, data):
+        sfreq = data.info["sfreq"]
+        if sfreq == self.sample_rate:
+            return data
+
+        # 1. Extract data as numpy array (Channels x Time)
+        data_np = data.get_data()
+
+        # 2. Resample using resampy with 'kaiser_fast' (Matching Notebook)
+        resampled_data_np = resampy.resample(
+            data_np, sfreq, self.sample_rate, axis=1, filter="kaiser_fast"
+        )
+
+        # 3. Wrap back into MNE RawArray
+        # We must update the info structure with the new sampling rate
+        info = data.info.copy()
+        with info._unlock():
+            info["sfreq"] = self.sample_rate
+
+        # Create new RawArray with resampled data
+        return mne.io.RawArray(resampled_data_np, info, verbose=False)
+
+    def get_id(self):
+        return f"{self.__class__.__name__}_{self.sample_rate}_kaiser_fast"
+
+class PaddedCropData(Preprocess):
     ''' Responsible for cropping the data to the specified time range.
         If duration < tmax, appends data to the end
         Inputs: raw EEG data in MNE format
@@ -79,7 +115,6 @@ class PaddedCropData(CropData):
         else:
             while data.n_times / data.info["sfreq"] < self.tmax:
                 data_only, _ = data[:]
-                reversed = np.flip(data_only, axis = 1)
                 info = data.info
                 data_only = np.concatenate([data_only, data_only], axis=1)
                 data = mne.io.RawArray(data_only, info)
@@ -226,7 +261,7 @@ def get_scnet_pipeline():
     pipeline.add(Scale(1e6))
     return pipeline
 
-def local_pipeline(dataset='NMT'):
+def local_pipeline():
     pipeline = Pipeline()
     pipeline.add(ReduceChannels(channels=LOCAL_CHANNELS))
     pipeline.add(Scale(1e6))
